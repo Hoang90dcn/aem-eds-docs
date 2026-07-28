@@ -1,0 +1,37 @@
+.cards-promotion__wrapper {
+    overflow: hidden;
+    border-radius: 32px;
+    background: #000;
+}
+
+.cards-promotion__image {
+    display: block;
+    width: 100%;
+}
+
+.cards-promotion__content {
+    padding: 40px;
+}
+
+.cards-promotion__title {
+    margin: 0 0 24px;
+    color: #fff;
+    font-size: 2rem;
+    line-height: 1.3;
+}
+
+.cards-promotion__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 14px 28px;
+
+    border-radius: 12px;
+
+    background: #fff;
+    color: #000;
+
+    text-decoration: none;
+    font-weight: 600;
+}
