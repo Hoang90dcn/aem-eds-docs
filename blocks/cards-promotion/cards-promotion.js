@@ -1,33 +1,40 @@
 export default function decorate(block) {
-  const data = {};
+  const rows = [...block.children];
 
-  [...block.children].forEach((row) => {
-    const key = row.children[0].textContent.trim();
-    const value = row.children[1].textContent.trim();
+  // Remove header row
+  rows.shift();
 
-    data[key] = value;
+  const cards = rows.map((row) => {
+    const cols = [...row.children];
+
+    const image = cols[0]?.innerHTML || "";
+    const title = cols[1]?.textContent.trim() || "";
+    const buttonText = cols[2]?.textContent.trim() || "";
+    const buttonLink = cols[3]?.textContent.trim() || "#";
+
+    return `
+      <article class="promotion-card">
+        <div class="promotion-card__image">
+          ${image}
+        </div>
+
+        <div class="promotion-card__content">
+          <h3>${title}</h3>
+
+          <a
+            class="promotion-card__button"
+            href="${buttonLink}"
+          >
+            ${buttonText}
+          </a>
+        </div>
+      </article>
+    `;
   });
 
   block.innerHTML = `
-    <div class="cards-promotion__wrapper">
-      <img
-        class="cards-promotion__image"
-        src="${data.image}"
-        alt="${data.title}"
-      />
-
-      <div class="cards-promotion__content">
-        <h2 class="cards-promotion__title">
-          ${data.title}
-        </h2>
-
-        <a
-          class="cards-promotion__button"
-          href="${data.buttonLink}"
-        >
-          ${data.buttonText}
-        </a>
-      </div>
+    <div class="promotion-grid">
+      ${cards.join("")}
     </div>
   `;
 }
