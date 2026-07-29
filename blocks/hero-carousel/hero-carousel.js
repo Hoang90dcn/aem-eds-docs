@@ -1,110 +1,182 @@
-import Swiper from 'swiper';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-
 export default function decorate(block) {
   const rows = [...block.children];
 
-  const swiper = document.createElement('div');
-  swiper.className = 'swiper hero-carousel-swiper';
+  if (rows.length <= 1) return;
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'swiper-wrapper';
+  // Remove header row
+  rows.shift();
 
-  rows.forEach((row) => {
+  const slides = rows.map((row) => {
     const cells = [...row.children];
 
-    const [
-      image,
-      date,
-      title,
-      description,
-      buttonText,
-      buttonLink,
-    ] = cells;
+    return {
+      image: cells[0]?.innerHTML || '',
+      date: cells[1]?.textContent.trim() || '',
+      title: cells[2]?.textContent.trim() || '',
+      description: cells[3]?.textContent.trim() || '',
+      button: cells[4]?.textContent.trim() || '',
+        link: cells[5]?.querySelector('a')?.href || '#',
+      align: cells[8]?.textContent.trim().toLowerCase() || 'right'
+    };
+  });
 
-    const slide = document.createElement('div');
-    slide.className = 'swiper-slide';
+  block.innerHTML = `
+    <div class="hero-carousel">
 
-    slide.innerHTML = `
-      <div class="hero-slide">
+      <div class="hero-track">
 
-        <div class="hero-slide__image">
-          ${image?.innerHTML || ''}
-        </div>
+        ${slides
+          .map(
+            (slide) => `
+          <div class="hero-slide">
 
-        <div class="hero-slide__content">
+              <div class="hero-background">
+                  ${slide.image}
+              </div>
 
-          <span class="hero-slide__date">
-            ${date?.textContent || ''}
-          </span>
+              <div class="hero-overlay"></div>
 
-          <h2 class="hero-slide__title">
-            ${title?.textContent || ''}
-          </h2>
+              <div class="hero-content hero-${slide.align}">
 
-          <p class="hero-slide__description">
-            ${description?.textContent || ''}
-          </p>
+                  <span class="hero-date">
+                      ${slide.date}
+                  </span>
 
-          ${
-            buttonLink?.querySelector('a')
-              ? `
-                <a
-                  class="hero-slide__button"
-                  href="${buttonLink.querySelector('a').href}"
-                >
-                  ${buttonText?.textContent || 'Learn more'}
-                </a>
-              `
-              : ''
-          }
+                  <h3>
+                      ${slide.title}
+                  </h3>
 
-        </div>
+                  <p>
+                      ${slide.description}
+                  </p>
+
+                  <a href="${slide.link}" class="hero-btn">
+                      ${slide.button}
+                  </a>
+
+              </div>
+
+          </div>
+        `,
+          )
+          .join('')}
 
       </div>
-    `;
 
-    wrapper.append(slide);
+      <button class="hero-prev">
+          &#10094;
+      </button>
+
+      <button class="hero-next">
+          &#10095;
+      </button>
+
+      <div class="hero-pagination"></div>
+
+    </div>
+  `;
+
+  const track = block.querySelector('.hero-track');
+  const slideElements = [...block.querySelectorAll('.hero-slide')];
+  const pagination = block.querySelector('.hero-pagination');
+
+  let current = 0;
+  let timer;
+
+  slideElements.forEach((_, index) => {
+    const dot = document.createElement('button');
+
+    dot.className = 'hero-dot';
+
+    dot.addEventListener('click', () => {
+      current = index;
+      update();
+      restart();
+    });
+
+    pagination.append(dot);
   });
 
-  swiper.append(wrapper);
+  const dots = [...pagination.children];
 
-  swiper.insertAdjacentHTML(
-    'beforeend',
-    `
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-      <div class="swiper-pagination"></div>
-    `,
-  );
+  function update() {
+    track.style.transform = `translateX(-${current * 100}%)`;
 
-  block.textContent = '';
-  block.append(swiper);
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', current === index);
+    });
+  }
 
-  new Swiper(swiper, {
-    modules: [Navigation, Pagination, Autoplay],
+  function next() {
+    current++;
 
-    loop: true,
+    if (current >= slideElements.length) {
+      current = 0;
+    }
 
-    speed: 800,
+    update();
+  }
 
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false,
-    },
+  function prev() {
+    current--;
 
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
+    if (current < 0) {
+      current = slideElements.length - 1;
+    }
 
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
+    update();
+  }
+
+  function autoplay() {
+    timer = setInterval(next, 5000);
+  }
+
+  function restart() {
+    clearInterval(timer);
+    autoplay();
+  }
+
+  block.querySelector('.hero-next').addEventListener('click', () => {
+    next();
+    restart();
   });
+
+  block.querySelector('.hero-prev').addEventListener('click', () => {
+    prev();
+    restart();
+  });
+
+  // Swipe
+
+  let startX = 0;
+
+  track.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+  });
+
+  track.addEventListener('touchend', (e) => {
+    const diff = startX - e.changedTouches[0].clientX;
+
+    if (diff > 60) {
+      next();
+      restart();
+    }
+
+    if (diff < -60) {
+      prev();
+      restart();
+    }
+  });
+
+  block.addEventListener('mouseenter', () => {
+    clearInterval(timer);
+  });
+
+  block.addEventListener('mouseleave', () => {
+    autoplay();
+  });
+
+  update();
+
+  autoplay();
 }
