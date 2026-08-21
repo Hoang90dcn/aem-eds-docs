@@ -1,0 +1,286 @@
+/* ==========================================
+   Carousel
+========================================== */
+
+.fp-carousel {
+    position: relative;
+    width: 100%;
+}
+
+.fp-carousel__viewport {
+    overflow: hidden;
+    width: 100%;
+}
+
+.fp-carousel__track {
+    display: flex;
+    align-items: stretch;
+    transition: transform .45s ease;
+    will-change: transform;
+}
+
+.fp-carousel__track.is-dragging {
+    transition: none;
+    cursor: grabbing;
+}
+
+.fp-carousel__slide {
+    flex: 0 0 25%;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+/* ==========================
+        Navigation
+========================== */
+
+.fp-carousel__prev,
+.fp-carousel__next {
+
+    position: absolute;
+
+    top: 50%;
+
+    width: 44px;
+
+    height: 44px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, .95);
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .12);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+    transform: translateY(-50%);
+
+    z-index: 20;
+}
+
+.fp-carousel__prev {
+
+    left: -22px;
+
+}
+
+.fp-carousel__next {
+
+    right: -22px;
+
+}
+
+.fp-carousel__prev:hover,
+.fp-carousel__next:hover {
+
+    background: var(--fp-primary);
+
+    color: #fff;
+
+    transform: translateY(-50%) scale(1.05);
+
+}
+
+.fp-carousel__prev:disabled,
+.fp-carousel__next:disabled {
+
+    opacity: .35;
+
+    cursor: not-allowed;
+
+    pointer-events: none;
+
+}
+
+/* ==========================
+        Pagination
+========================== */
+
+.fp-carousel__pagination {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 32px;
+
+}
+
+.fp-carousel__dot {
+
+    width: 10px;
+
+    height: 10px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: #d9d9d9;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+.fp-carousel__dot:hover {
+
+    background: var(--fp-primary);
+
+}
+
+.fp-carousel__dot.is-active {
+
+    width: 32px;
+
+    border-radius: 999px;
+
+    background: var(--fp-primary);
+
+}
+
+/* ==========================
+        Drag Cursor
+========================== */
+
+.fp-carousel__viewport {
+
+    cursor: grab;
+
+    user-select: none;
+
+}
+
+.fp-carousel__viewport:active {
+
+    cursor: grabbing;
+
+}
+
+/* ==========================
+        Fade Effect
+========================== */
+
+.fp-carousel__slide {
+
+    transition: opacity .3s ease;
+
+}
+
+.fp-carousel__slide[aria-hidden="true"] {
+
+    opacity: .6;
+
+}
+
+/* ==========================
+        Focus
+========================== */
+
+.fp-carousel__prev:focus-visible,
+.fp-carousel__next:focus-visible,
+.fp-carousel__dot:focus-visible {
+
+    outline: 3px solid rgba(165, 0, 52, .3);
+
+    outline-offset: 2px;
+
+}
+
+/* ==========================
+        Desktop
+========================== */
+
+@media (max-width:1400px) {
+
+    .fp-carousel__slide {
+
+        flex: 0 0 33.3333%;
+
+    }
+
+}
+
+/* ==========================
+        Tablet
+========================== */
+
+@media (max-width:1024px) {
+
+    .fp-carousel__slide {
+
+        flex: 0 0 50%;
+
+    }
+
+    .fp-carousel__prev {
+
+        left: -10px;
+
+    }
+
+    .fp-carousel__next {
+
+        right: -10px;
+
+    }
+
+}
+
+/* ==========================
+        Mobile
+========================== */
+
+@media (max-width:767px) {
+
+    .fp-carousel__slide {
+
+        flex: 0 0 100%;
+
+        padding: 8px;
+
+    }
+
+    .fp-carousel__prev,
+    .fp-carousel__next {
+
+        width: 38px;
+
+        height: 38px;
+
+    }
+
+    .fp-carousel__prev {
+
+        left: 8px;
+
+    }
+
+    .fp-carousel__next {
+
+        right: 8px;
+
+    }
+
+    .fp-carousel__pagination {
+
+        margin-top: 20px;
+
+    }
+
+}

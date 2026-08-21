@@ -1,0 +1,202 @@
+/* ==========================================
+   Tabs
+========================================== */
+
+.featured-products__tabs {
+    width: 100%;
+    overflow: hidden;
+}
+
+.featured-products__tabs-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 6px;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    scroll-behavior: smooth;
+}
+
+.featured-products__tabs-wrapper::-webkit-scrollbar {
+    display: none;
+}
+
+/* ==========================
+        Tab Button
+========================== */
+
+.featured-products__tab {
+
+    position: relative;
+
+    flex-shrink: 0;
+
+    border: 1px solid var(--fp-border);
+
+    background: #fff;
+
+    color: var(--fp-text);
+
+    padding: 14px 28px;
+
+    border-radius: 999px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background .3s,
+        color .3s,
+        border-color .3s,
+        transform .2s;
+
+    white-space: nowrap;
+}
+
+/* Hover */
+
+.featured-products__tab:hover {
+
+    border-color: var(--fp-primary);
+
+    color: var(--fp-primary);
+
+    transform: translateY(-2px);
+}
+
+/* Active */
+
+.featured-products__tab.is-active {
+
+    background: var(--fp-primary);
+
+    color: #fff;
+
+    border-color: var(--fp-primary);
+}
+
+/* Click */
+
+.featured-products__tab:active {
+
+    transform: scale(.96);
+
+}
+
+/* Keyboard */
+
+.featured-products__tab:focus-visible {
+
+    outline: 3px solid rgba(165, 0, 52, .25);
+
+    outline-offset: 3px;
+
+}
+
+/* Disabled */
+
+.featured-products__tab:disabled {
+
+    opacity: .5;
+
+    cursor: not-allowed;
+
+}
+
+/* ==========================
+        Underline Animation
+========================== */
+
+.featured-products__tab::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: -8px;
+
+    width: 0;
+
+    height: 3px;
+
+    border-radius: 3px;
+
+    background: var(--fp-primary);
+
+    transition: .3s;
+
+    transform: translateX(-50%);
+
+}
+
+.featured-products__tab.is-active::after {
+
+    width: 60%;
+
+}
+
+/* ==========================
+        Desktop
+========================== */
+
+@media (min-width:1024px) {
+
+    .featured-products__tabs-wrapper {
+
+        justify-content: center;
+
+    }
+
+}
+
+/* ==========================
+        Tablet
+========================== */
+
+@media (max-width:1023px) {
+
+    .featured-products__tabs-wrapper {
+
+        justify-content: flex-start;
+
+    }
+
+}
+
+/* ==========================
+        Mobile
+========================== */
+
+@media (max-width:767px) {
+
+    .featured-products__tabs-wrapper {
+
+        gap: 12px;
+
+        padding-inline: 2px;
+
+    }
+
+    .featured-products__tab {
+
+        font-size: 14px;
+
+        padding: 12px 20px;
+
+    }
+
+}
