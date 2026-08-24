@@ -292,24 +292,15 @@ transform: scaleX(0);
   position: relative;
 }
 
+/* shared panel chrome, the two variants below place it */
+
 .nav-drop>ul {
   position: absolute;
-top: 72px;
-  left: 50%;
+  top: 72px;
 
   z-index: 100;
 
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, minmax(180px, 1fr));
-
-  gap: 32px;
-
-  width: min(1100px, 90vw);
-
   margin: 0;
-  padding: 36px 40px;
 
   background: #fff;
 
@@ -323,9 +314,6 @@ top: 72px;
   opacity: 0;
   visibility: hidden;
 
-  transform:
-    translate(-50%, 10px);
-
   transition:
     opacity 0.2s ease,
     transform 0.2s ease,
@@ -335,22 +323,99 @@ top: 72px;
 .nav-drop[aria-expanded='true']>ul {
   opacity: 1;
   visibility: visible;
-
-  transform:
-    translate(-50%, 0);
 }
-
-
-/* =========================================================
-   DROPDOWN ITEMS
-========================================================= */
 
 .nav-drop>ul>li {
   margin: 0;
   padding: 0;
 }
 
-.nav-drop>ul>li>a {
+
+/* =========================================================
+   DROPDOWN — LEVEL 2 ONLY (plain list)
+========================================================= */
+
+.nav-drop-simple>ul {
+  left: 0;
+
+  display: block;
+
+  min-width: 240px;
+
+  padding: 12px 0;
+
+  border-radius: 8px;
+
+  transform: translateY(10px);
+}
+
+.nav-drop-simple[aria-expanded='true']>ul {
+  transform: translateY(0);
+}
+
+.nav-drop-simple>ul>li>a,
+.nav-drop-simple>ul>li>.nav-drop-label {
+  display: block;
+
+  padding: 10px 20px;
+
+  color: #111;
+
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+
+  text-decoration: none;
+
+  white-space: nowrap;
+}
+
+.nav-drop-simple>ul>li>a:hover {
+  background: #f5f5f5;
+
+  color: #000;
+}
+
+
+/* =========================================================
+   DROPDOWN — LEVEL 2 + 3 (mega menu in columns)
+========================================================= */
+
+/*
+   Anchored to #nav rather than to the item, so a panel opened
+   from the leftmost entry cannot run off the viewport.
+*/
+
+.nav-sections>ul>li.nav-drop-mega {
+  position: static;
+}
+
+.nav-drop-mega>ul {
+  right: 0;
+  left: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 32px 48px;
+
+  padding: 36px 40px;
+
+  transform: translateY(10px);
+}
+
+.nav-drop-mega[aria-expanded='true']>ul {
+  transform: translateY(0);
+}
+
+.nav-drop-mega>ul>li {
+  min-width: 180px;
+}
+
+/* level 2 becomes the column heading */
+
+.nav-drop-mega>ul>li>a,
+.nav-drop-mega>ul>li>.nav-drop-label {
   display: block;
 
   margin-bottom: 14px;
@@ -359,11 +424,14 @@ top: 72px;
 
   font-size: 15px;
   font-weight: 700;
+  line-height: 1.4;
 
   text-decoration: none;
 }
 
-.nav-drop>ul>li>ul {
+/* level 3 are the links under it */
+
+.nav-drop-mega>ul>li>ul {
   display: flex;
   flex-direction: column;
 
@@ -375,15 +443,19 @@ top: 72px;
   list-style: none;
 }
 
-.nav-drop>ul>li>ul>li>a {
+.nav-drop-mega>ul>li>ul>li>a,
+.nav-drop-mega>ul>li>ul>li>.nav-drop-label {
+  display: block;
+
   color: #555;
 
   font-size: 14px;
+  line-height: 1.4;
 
   text-decoration: none;
 }
 
-.nav-drop>ul>li>ul>li>a:hover {
+.nav-drop-mega>ul>li>ul>li>a:hover {
   color: #111;
 }
 
@@ -533,36 +605,166 @@ top: 72px;
 }
 
 /* =========================================================
+   ACCOUNT MENU
+========================================================= */
+
+.nav-account {
+  position: relative;
+}
+
+/*
+   The wrapper keeps a transparent strip above
+   the card so the pointer can travel from the
+   icon to the menu without closing it.
+*/
+
+.nav-account-panel {
+  position: absolute;
+
+  top: 100%;
+  right: -8px;
+
+  z-index: 200;
+
+  min-width: 220px;
+
+  padding-top: 8px;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(6px);
+
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    visibility 0.18s ease;
+}
+
+.nav-account[data-open='true'] .nav-account-panel {
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateY(0);
+}
+
+.nav-account-card {
+  padding: 12px 0;
+
+  background: #fff;
+
+  border-radius: 8px;
+
+  box-shadow:
+    0 8px 24px rgb(0 0 0 / 14%);
+}
+
+/*
+   Greeting is only rendered for a member,
+   the rule below draws the separator that
+   splits it from the menu items.
+*/
+
+.nav-account-greeting {
+  margin: 0;
+
+  padding: 8px 24px 16px;
+
+  border-bottom: 1px solid #e5e5e5;
+
+  color: #111;
+
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+
+  white-space: nowrap;
+}
+
+.nav-account-greeting + .nav-account-list {
+  padding-top: 8px;
+}
+
+.nav-account-list {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.nav-account-list li {
+  margin: 0;
+  padding: 0;
+}
+
+.nav-account .nav-account-link {
+  display: block;
+
+  width: 100%;
+
+  padding: 10px 24px;
+
+  background: none;
+  border: 0;
+  border-radius: 0;
+
+  color: #111;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+
+  text-align: left;
+  text-decoration: none;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease;
+}
+
+.nav-account .nav-account-link:hover,
+.nav-account .nav-account-link:focus-visible {
+  background: #f5f5f5;
+
+  color: #000;
+}
+
+/* =========================================================
    DESKTOP
 ========================================================= */
 
 @media (min-width: 900px) {
-
   .nav-hamburger {
     display: none;
+  }
+
   .sections-wrapper {
     display: flex;
   }
-  
+
   .tools-wrapper {
     display: flex;
   }
-  }
-  
-  
-  /* =========================================================
-     MOBILE
-  ========================================================= */
-  
-  @media (max-width: 899px) {
-  
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 899px) {
+
     /* -----------------------------------------
        NAV
     ----------------------------------------- */
-  
+
     #nav {
       height: 64px;
-  
+
       padding: 0 16px;
     }
 
@@ -728,9 +930,10 @@ transform: none;
     0 0 12px;
   }
 
-    .nav-drop>ul>li>a {
+    .nav-drop>ul>li>a,
+    .nav-drop>ul>li>.nav-drop-label {
       margin-bottom: 8px;
-  
+
       font-size: 14px;
   }
 
@@ -790,9 +993,9 @@ transform: none;
       width: 36px;
       height: 36px;
   }
-.nav-brand img {
-  width: 76px;
-  
+    .nav-brand img {
+      width: 76px;
+  }
 
     .nav-tool-link {
       width: 34px;

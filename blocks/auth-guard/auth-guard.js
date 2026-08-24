@@ -1,7 +1,7 @@
-import { isLoggedIn } from '../../common/sso';
+import { isLoggedIn } from '../../common/auth/authHelper.js';
 
 export default function decorate(block) {
-    if (!isLoggedIn()) {
+    if (isLoggedIn()) {
       console.log('User is not logged in. Redirecting to login.');
     block.remove();
     return;

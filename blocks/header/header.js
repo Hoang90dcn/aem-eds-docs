@@ -1,5 +1,6 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
+import { isLoggedIn, getUserName, logout } from '../../common/auth/authHelper.js';
 
 const isDesktop = window.matchMedia('(min-width: 900px)');
 
@@ -90,6 +91,73 @@ function setupBrand(brand) {
    SECTIONS
 ========================================================= */
 
+/*
+ * The submenu can be authored two ways:
+ *
+ *   a) label as text, submenu as a bullet list under it
+ *      <div><p>Products</p><ul>…</ul></div>
+ *
+ *   b) label as a bullet with nested bullets
+ *      <div><ul><li>Products<ul>…</ul></li></ul></div>
+ *
+ * Both end up as one list of children for the item.
+ */
+function getSubmenu(content) {
+  const outer = content.querySelector(':scope > ul');
+
+  if (!outer) return null;
+
+  /*
+   * Shape b: a single bullet wrapping the real submenu.
+   */
+  if (content.children.length === 1 && outer.children.length === 1) {
+    const inner = outer.children[0].querySelector(':scope > ul');
+
+    if (inner) return inner;
+  }
+
+  return outer;
+}
+
+/*
+ * An entry authored without a link is a bare text node, which
+ * has nothing to hang padding on. Wrap it so links and plain
+ * labels can share one rule.
+ */
+function wrapItemLabel(item) {
+  if (item.querySelector(':scope > a, :scope > .nav-drop-label')) return;
+
+  const label = document.createElement('span');
+
+  label.className = 'nav-drop-label';
+
+  [...item.childNodes]
+    .filter((node) => node.nodeName !== 'UL')
+    .forEach((node) => label.append(node));
+
+  if (!label.textContent.trim()) return;
+
+  item.prepend(label);
+}
+
+/*
+ * A submenu whose items have their own lists is a mega menu
+ * laid out in columns. A flat one is a plain dropdown.
+ */
+function decorateSubmenu(item, submenu) {
+  submenu.querySelectorAll('li').forEach(wrapItemLabel);
+
+  const hasGroups = !!submenu.querySelector(':scope > li > ul');
+
+  item.classList.add('nav-drop');
+
+  item.classList.add(hasGroups ? 'nav-drop-mega' : 'nav-drop-simple');
+
+  item.setAttribute('aria-expanded', 'false');
+
+  item.append(submenu);
+}
+
 function setupSections(navSections) {
   if (!navSections) return;
 
@@ -130,12 +198,18 @@ function setupSections(navSections) {
   const list = document.createElement('ul');
 
   rows.forEach((row) => {
-    const content =
-      row.querySelector(':scope > div') ||
-      row;
+    const content = row.querySelector(':scope > div') || row;
 
-    const link =
-      content.querySelector('a');
+    /*
+     * Detach the submenu before reading the label, otherwise
+     * querySelector('a') would pick the first child link and
+     * the top level item would inherit its text and href.
+     */
+    const nestedList = getSubmenu(content);
+
+    if (nestedList) nestedList.remove();
+
+    const link = content.querySelector('a');
 
     const label =
       link?.textContent?.trim() ||
@@ -155,26 +229,10 @@ function setupSections(navSections) {
 
     anchor.textContent = label;
 
-    /*
-     * If this is a dropdown later,
-     * nested UL can be detected here.
-     */
-    const nestedList =
-      content.querySelector(
-        ':scope > ul',
-      );
-
     li.append(anchor);
 
     if (nestedList) {
-      li.classList.add('nav-drop');
-
-      li.setAttribute(
-        'aria-expanded',
-        'false',
-      );
-
-      li.append(nestedList);
+      decorateSubmenu(li, nestedList);
     }
 
     list.append(li);
@@ -381,6 +439,262 @@ function setupTools(navTools) {
 
 
 /* =========================================================
+   ACCOUNT MENU
+========================================================= */
+
+/*
+ * Hard-coded sub menu shown when hovering
+ * the account icon (same as LG.com "MyLG").
+ *
+ * Two variants, picked by the login state.
+ */
+const ACCOUNT_MENU_GUEST = [
+  {
+    label: 'Đăng nhập / Đăng ký',
+    href: '/vn/login',
+  },
+  {
+    label: 'Đăng ký sản phẩm',
+    href: '/vn/dang-ky-san-pham',
+  },
+  {
+    label: 'Quyền lợi thành viên',
+    href: '/vn/quyen-loi-thanh-vien',
+  },
+];
+
+const ACCOUNT_MENU_MEMBER = [
+  {
+    label: 'LG của tôi',
+    href: '/vn/my-lg',
+  },
+  {
+    label: 'Tài khoản của tôi',
+    href: '/vn/tai-khoan-cua-toi',
+  },
+  {
+    label: 'Đơn hàng của tôi',
+    href: '/vn/don-hang-cua-toi',
+  },
+  {
+    label: 'Đăng ký sản phẩm',
+    href: '/vn/dang-ky-san-pham',
+  },
+  {
+    label: 'Quyền lợi thành viên',
+    href: '/vn/quyen-loi-thanh-vien',
+  },
+  {
+    label: 'Đăng xuất',
+    action: 'logout',
+  },
+];
+
+const ACCOUNT_SELECTOR = '.nav-tool-account, .nav-tool-my, .nav-tool-mylg, .nav-tool-user';
+
+const ACCOUNT_LABEL = /account|tài khoản|tai khoan|mylg/i;
+
+function findAccountLink(navTools) {
+  if (!navTools) return null;
+
+  const direct = navTools.querySelector(ACCOUNT_SELECTOR);
+
+  if (direct) return direct;
+
+  /*
+   * Fallback when the icon column in the
+   * document uses a different name.
+   */
+  const links = [...navTools.querySelectorAll('.nav-tool-link')];
+
+  const match = links.find((link) => {
+    const label = link.getAttribute('aria-label') || '';
+
+    return ACCOUNT_LABEL.test(label);
+  });
+
+  return match || null;
+}
+
+function setAccountMenuState(account, expanded) {
+  if (!account) return;
+
+  account.dataset.open = expanded ? 'true' : 'false';
+
+  const trigger = account.querySelector('.nav-tool-link');
+
+  trigger?.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+}
+
+function closeAccountMenus(root) {
+  if (!root) return;
+
+  const open = root.querySelectorAll('.nav-account[data-open="true"]');
+
+  open.forEach((account) => {
+    setAccountMenuState(account, false);
+  });
+}
+
+/*
+ * "Hoang Nguyen" -> "***** Nguyen"
+ *
+ * Everything but the last word is masked,
+ * the same way LG.com greets a member.
+ */
+function maskUserName(name) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+
+  if (parts.length < 2) return parts.join('');
+
+  const last = parts.pop();
+
+  const masked = parts.map((part) => '*'.repeat(part.length)).join(' ');
+
+  return `${masked} ${last}`;
+}
+
+function createGreeting() {
+  const name = maskUserName(getUserName());
+
+  const greeting = document.createElement('p');
+
+  greeting.className = 'nav-account-greeting';
+
+  greeting.textContent = name ? `Chào mừng bạn! ${name}` : 'Chào mừng bạn!';
+
+  return greeting;
+}
+
+function createLogoutButton(label) {
+  const button = document.createElement('button');
+
+  button.type = 'button';
+  button.className = 'nav-account-link nav-account-logout';
+  button.textContent = label;
+
+  button.addEventListener('click', () => {
+    logout();
+
+    window.location.reload();
+  });
+
+  return button;
+}
+
+function createMenuLink(item) {
+  const link = document.createElement('a');
+
+  link.className = 'nav-account-link';
+  link.href = item.href;
+  link.textContent = item.label;
+
+  return link;
+}
+
+function createAccountPanel() {
+  const loggedIn = isLoggedIn();
+
+  const panel = document.createElement('div');
+
+  panel.className = 'nav-account-panel';
+
+  const card = document.createElement('div');
+
+  card.className = 'nav-account-card';
+
+  if (loggedIn) {
+    card.append(createGreeting());
+  }
+
+  const list = document.createElement('ul');
+
+  list.className = 'nav-account-list';
+
+  const items = loggedIn ? ACCOUNT_MENU_MEMBER : ACCOUNT_MENU_GUEST;
+
+  items.forEach((item) => {
+    const li = document.createElement('li');
+
+    if (item.action === 'logout') {
+      li.append(createLogoutButton(item.label));
+    } else {
+      li.append(createMenuLink(item));
+    }
+
+    list.append(li);
+  });
+
+  card.append(list);
+
+  panel.append(card);
+
+  return panel;
+}
+
+function setupAccountMenu(navTools) {
+  const trigger = findAccountLink(navTools);
+
+  if (!trigger) return;
+
+  const account = trigger.parentElement;
+
+  if (!account) return;
+
+  if (account.dataset.accountDecorated === 'true') return;
+
+  account.classList.add('nav-account');
+
+  account.dataset.accountDecorated = 'true';
+
+  trigger.setAttribute('aria-haspopup', 'true');
+
+  account.append(createAccountPanel());
+
+  setAccountMenuState(account, false);
+
+  /*
+   * Desktop: open on hover
+   */
+  account.addEventListener('mouseenter', () => {
+    if (!isDesktop.matches) return;
+
+    setAccountMenuState(account, true);
+  });
+
+  account.addEventListener('mouseleave', () => {
+    if (!isDesktop.matches) return;
+
+    setAccountMenuState(account, false);
+  });
+
+  /*
+   * Keyboard
+   */
+  account.addEventListener('focusin', () => {
+    setAccountMenuState(account, true);
+  });
+
+  account.addEventListener('focusout', (event) => {
+    if (account.contains(event.relatedTarget)) return;
+
+    setAccountMenuState(account, false);
+  });
+
+  /*
+   * Touch / mobile: toggle on tap
+   */
+  trigger.addEventListener('click', (event) => {
+    if (isDesktop.matches) return;
+
+    event.preventDefault();
+
+    setAccountMenuState(account, account.dataset.open !== 'true');
+  });
+}
+
+
+/* =========================================================
    DROPDOWN
 ========================================================= */
 
@@ -451,39 +765,66 @@ function toggleDropdown(
    DROPDOWN EVENTS
 ========================================================= */
 
-function handleDropdownClick(event) {
+function handleDropdownEnter(event) {
   if (!isDesktop.matches) return;
 
+  toggleDropdown(event.currentTarget, true);
+}
+
+function handleDropdownLeave(event) {
+  if (!isDesktop.matches) return;
+
+  toggleDropdown(event.currentTarget, false);
+}
+
+/*
+ * Tabbing onto the label opens the panel, the keyboard
+ * equivalent of hovering.
+ */
+function handleDropdownFocusIn(event) {
+  if (!isDesktop.matches) return;
+
+  toggleDropdown(event.currentTarget, true);
+}
+
+function handleDropdownFocusOut(event) {
+  if (!isDesktop.matches) return;
+
+  const item = event.currentTarget;
+
+  if (item.contains(event.relatedTarget)) return;
+
+  toggleDropdown(item, false);
+}
+
+function handleDropdownClick(event) {
   const item =
     event.currentTarget;
 
-  const link =
-    event.target.closest(
-      ':scope > a',
-    );
+  const link = event.target.closest('a');
 
-  if (!link) return;
+  /*
+   * Only the item's own label reacts, links inside the
+   * submenu have to navigate as usual.
+   */
+  if (!link || link.parentElement !== item) return;
 
-  event.preventDefault();
+  /*
+   * Desktop already opens on hover. Swallow the click only
+   * when the label has nowhere to go, so a real href still
+   * works as a landing page link.
+   */
+  if (isDesktop.matches) {
+    const href = link.getAttribute('href');
 
-  toggleDropdown(item);
-}
+    if (!href || href === '#') event.preventDefault();
 
-function handleDropdownKeydown(event) {
-  if (!isDesktop.matches) return;
-
-  if (
-    event.code !== 'Enter' &&
-    event.code !== 'Space'
-  ) {
     return;
   }
 
   event.preventDefault();
 
-  toggleDropdown(
-    event.currentTarget,
-  );
+  toggleDropdown(item);
 }
 
 function setupDropdowns(navSections) {
@@ -506,37 +847,41 @@ function setupDropdowns(navSections) {
       'nav-drop',
     );
 
+    /*
+     * Only needed when the markup arrived already decorated.
+     */
+    if (
+      !item.classList.contains('nav-drop-mega') &&
+      !item.classList.contains('nav-drop-simple')
+    ) {
+      const hasGroups = !!submenu.querySelector(':scope > li > ul');
+
+      item.classList.add(hasGroups ? 'nav-drop-mega' : 'nav-drop-simple');
+    }
+
     item.setAttribute(
       'aria-expanded',
       'false',
     );
 
-    item.removeEventListener(
-      'click',
-      handleDropdownClick,
-    );
+    /*
+     * Attached once and guarded by breakpoint inside each
+     * handler, so switching between hover and tap needs no
+     * rebinding.
+     */
+    const events = [
+      ['click', handleDropdownClick],
+      ['mouseenter', handleDropdownEnter],
+      ['mouseleave', handleDropdownLeave],
+      ['focusin', handleDropdownFocusIn],
+      ['focusout', handleDropdownFocusOut],
+    ];
 
-    item.addEventListener(
-      'click',
-      handleDropdownClick,
-    );
+    events.forEach(([type, handler]) => {
+      item.removeEventListener(type, handler);
 
-    if (isDesktop.matches) {
-      item.setAttribute(
-        'tabindex',
-        '0',
-      );
-
-      item.removeEventListener(
-        'keydown',
-        handleDropdownKeydown,
-      );
-
-      item.addEventListener(
-        'keydown',
-        handleDropdownKeydown,
-      );
-    }
+      item.addEventListener(type, handler);
+    });
   });
 }
 
@@ -548,19 +893,18 @@ function cleanupDropdowns(navSections) {
       ':scope > ul > li.nav-drop',
     );
 
+  /*
+   * Listeners stay attached and decide per breakpoint, so
+   * this only has to drop desktop-only state.
+   */
   items.forEach((item) => {
     item.removeAttribute(
       'tabindex',
     );
 
-    item.removeEventListener(
-      'click',
-      handleDropdownClick,
-    );
-
-    item.removeEventListener(
-      'keydown',
-      handleDropdownKeydown,
+    item.setAttribute(
+      'aria-expanded',
+      'false',
     );
   });
 }
@@ -716,6 +1060,27 @@ function handleEscape(event) {
     nav.querySelector(
       '.nav-sections',
     );
+
+  /*
+   * Account menu takes priority
+   */
+  const openAccount =
+    nav.querySelector(
+      '.nav-account[data-open="true"]',
+    );
+
+  if (openAccount) {
+    setAccountMenuState(
+      openAccount,
+      false,
+    );
+
+    openAccount
+      .querySelector('.nav-tool-link')
+      ?.focus();
+
+    return;
+  }
 
   if (isDesktop.matches) {
     const expanded =
@@ -907,6 +1272,8 @@ function handleBreakpoint(
     sections,
   );
 
+  closeAccountMenus(nav);
+
   nav.setAttribute(
     'aria-expanded',
     'false',
@@ -1052,6 +1419,14 @@ export default async function decorate(
    */
 
   setupTools(tools);
+
+  /*
+   * -----------------------------------------
+   * Setup account menu
+   * -----------------------------------------
+   */
+
+  setupAccountMenu(tools);
 
   /*
    * -----------------------------------------

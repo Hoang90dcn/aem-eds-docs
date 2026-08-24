@@ -127,7 +127,7 @@ export function createProductCard(product) {
   // Member Price
 
   const memberPrice = createPrice(
-      "LG Member",
+      "DEMO Member",
       product.memberPrice,
       "is-member"
   );

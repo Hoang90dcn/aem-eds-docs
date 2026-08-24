@@ -5,6 +5,7 @@
           success: true,
           accessToken: 'fake-access-token-abc123',
           refreshToken: 'fake-refresh-token-xyz789',
+          userName: 'Hoang Nguyen',
         });
       }, 500);
     });
@@ -67,7 +68,13 @@ export function getCookie(name) {
 }
 
 
+export function deleteCookie(name, options = {}) {
+  setCookie(name, '', { ...options, maxAge: 0 });
+}
+
+
 export const COOKIE_NAME = {
     ACCESS_TOKEN: 'accessToken',
     REFRESH_TOKEN: 'refreshToken',
+    USER_NAME: 'userName',
 }

@@ -5,7 +5,7 @@ const mockData = {
       products: [
         {
           sku: 'OLED65G5',
-          name: 'Smart Tivi LG OLED evo AI G5 65 inch 4K',
+          name: 'Smart Tivi SAM SUNG OLED evo AI G5 65 inch 4K',
           url: '#',
           image:
             'https://images.samsung.com/is/image/samsung/p6pim/vn/qa55q6faakxxv/gallery/vn-qled-q6-qa55q6faakxxv-547923750?$1164_776_PNG$',
@@ -22,7 +22,7 @@ const mockData = {
         },
         {
           sku: 'GR-X257BG',
-          name: 'Tủ lạnh LG InstaView Door-in-Door 635L',
+          name: 'Tủ lạnh SAM SUNG InstaView Door-in-Door 635L',
           url: '#',
           image:
             'https://images.samsung.com/is/image/samsung/p6pim/vn/qa55q6faakxxv/gallery/vn-qled-q6-qa55q6faakxxv-547923750?$1164_776_PNG$',
@@ -56,7 +56,7 @@ const mockData = {
         },
         {
           sku: 'AS65GDBY0',
-          name: 'Máy lọc không khí LG PuriCare AeroTower',
+          name: 'Máy lọc không khí SAM SUNG PuriCare AeroTower',
           url: '#',
           image:
             'https://images.samsung.com/is/image/samsung/p6pim/vn/qa55q6faakxxv/gallery/vn-qled-q6-qa55q6faakxxv-547923750?$1164_776_PNG$',
@@ -78,7 +78,7 @@ const mockData = {
       products: [
         {
           sku: '55QNED80',
-          name: 'Smart Tivi LG QNED AI 55 inch 4K',
+          name: 'Smart Tivi SAM SUNG QNED AI 55 inch 4K',
           url: '#',
           image:
             'https://images.samsung.com/is/image/samsung/p6pim/vn/qa55q6faakxxv/gallery/vn-qled-q6-qa55q6faakxxv-547923750?$1164_776_PNG$',
@@ -95,7 +95,7 @@ const mockData = {
         },
         {
           sku: 'F40BG',
-          name: 'Máy lọc nước LG Puricare',
+          name: 'Máy lọc nước SAM SUNG Puricare',
           url: '#',
           image:
             'https://images.samsung.com/is/image/samsung/p6pim/vn/qa55q6faakxxv/gallery/vn-qled-q6-qa55q6faakxxv-547923750?$1164_776_PNG$',
@@ -117,7 +117,7 @@ const mockData = {
       products: [
         {
           sku: 'OLED55C5',
-          name: 'Smart Tivi LG OLED evo C5 55 inch',
+          name: 'Smart Tivi SAM SUNG OLED evo C5 55 inch',
           url: '#',
           image:
             'https://images.samsung.com/is/image/samsung/p6pim/vn/qa55q6faakxxv/gallery/vn-qled-q6-qa55q6faakxxv-547923750?$1164_776_PNG$',
@@ -139,7 +139,7 @@ const mockData = {
       products: [
         {
           sku: 'T30SV',
-          name: 'Máy hút bụi LG CordZero™ A9',
+          name: 'Máy hút bụi SAM SUNG CordZero™ A9',
           url: '#',
           image:
             'https://images.samsung.com/is/image/samsung/p6pim/vn/qa55q6faakxxv/gallery/vn-qled-q6-qa55q6faakxxv-547923750?$1164_776_PNG$',
