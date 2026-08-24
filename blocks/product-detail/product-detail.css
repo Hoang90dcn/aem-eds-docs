@@ -1,0 +1,1221 @@
+/* =========================================================
+   PRODUCT DETAIL
+========================================================= */
+
+main .product-detail {
+  --pd-accent: #e50914;
+  --pd-ink: #131313;
+  --pd-muted: #767676;
+  --pd-line: #dcdcdc;
+  --pd-surface: #fff;
+  --pd-sunken: #f4f2ee;
+  --pd-radius: 8px;
+
+  width: 100%;
+  max-width: 1280px;
+
+  margin: 0 auto;
+  padding: 0 16px;
+
+  color: var(--pd-ink);
+
+  box-sizing: border-box;
+}
+
+/*
+   The block toggles sections with the `hidden` property. Any
+   author rule that sets `display` beats the UA `[hidden]`
+   default regardless of specificity, so the reset has to be
+   forced or a hidden flex/grid box keeps rendering.
+*/
+
+main .product-detail [hidden] {
+  display: none !important;
+}
+
+main .product-detail .sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+
+  margin: -1px;
+  padding: 0;
+
+  overflow: hidden;
+
+  clip-path: inset(50%);
+
+  white-space: nowrap;
+}
+
+main .product-detail .pd-error {
+  padding: 48px 0;
+
+  text-align: center;
+}
+
+main .product-detail .pd-layout {
+  display: flex;
+  flex-direction: column;
+
+  gap: 24px;
+}
+
+/* =========================================================
+   GALLERY
+========================================================= */
+
+main .product-detail .pd-gallery {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 16px;
+
+  background: var(--pd-surface);
+
+  border-radius: var(--pd-radius);
+}
+
+main .product-detail .pd-gallery-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  aspect-ratio: 4 / 3;
+}
+
+main .product-detail .pd-gallery-image {
+  max-width: 100%;
+  max-height: 100%;
+
+  object-fit: contain;
+}
+
+main .product-detail .pd-gallery-thumbs {
+  display: flex;
+  justify-content: center;
+
+  gap: 8px;
+
+  margin: 16px 0 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+main .product-detail .pd-gallery-thumb {
+  display: block;
+
+  width: 52px;
+  height: 44px;
+
+  padding: 2px;
+
+  background: var(--pd-surface);
+
+  border: 1px solid var(--pd-line);
+  border-radius: 4px;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-gallery-thumb.is-active {
+  border-color: var(--pd-ink);
+}
+
+main .product-detail .pd-gallery-thumb img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+main .product-detail .pd-gallery-pager {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 12px;
+}
+
+main .product-detail .pd-gallery-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 24px;
+  height: 24px;
+
+  padding: 0;
+
+  background: none;
+  border: 0;
+
+  color: var(--pd-ink);
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-gallery-nav svg {
+  width: 12px;
+  height: 12px;
+}
+
+main .product-detail .pd-gallery-next svg {
+  transform: rotate(180deg);
+}
+
+main .product-detail .pd-gallery-nav:disabled {
+  color: #c4c4c4;
+
+  cursor: default;
+}
+
+main .product-detail .pd-gallery-counter {
+  font-size: 13px;
+
+  color: var(--pd-muted);
+}
+
+main .product-detail .pd-gallery-open {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 8px;
+  padding: 6px 10px;
+
+  background: none;
+  border: 0;
+
+  color: var(--pd-ink);
+
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-gallery-open svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+main .product-detail .pd-badge {
+  margin: 0 0 6px;
+
+  color: var(--pd-accent);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+main .product-detail .pd-title {
+  margin: 0 0 10px;
+
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+main .product-detail .pd-sku {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin: 0 0 12px;
+
+  color: #7a6a58;
+
+  font-size: 13px;
+}
+
+main .product-detail .pd-sku-copy {
+  display: flex;
+
+  padding: 2px;
+
+  background: none;
+  border: 0;
+
+  color: inherit;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-sku-copy svg {
+  width: 14px;
+  height: 14px;
+}
+
+main .product-detail .pd-sku-copy.is-copied {
+  color: #1a7f37;
+}
+
+main .product-detail .pd-rating {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 8px 12px;
+
+  padding-bottom: 12px;
+
+  border-bottom: 1px solid var(--pd-line);
+}
+
+main .product-detail .pd-star {
+  color: #c9c9c9;
+
+  font-size: 14px;
+}
+
+main .product-detail .pd-star.is-filled {
+  color: var(--pd-ink);
+}
+
+main .product-detail .pd-rating-count {
+  color: var(--pd-muted);
+
+  font-size: 12px;
+}
+
+main .product-detail .pd-rating-prompt {
+  padding: 3px 8px;
+
+  background: var(--pd-sunken);
+  border: 0;
+  border-radius: 3px;
+
+  color: var(--pd-ink);
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   PROMOS
+========================================================= */
+
+main .product-detail .pd-promo {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 12px;
+  padding: 10px 12px;
+
+  border-radius: 4px;
+
+  font-size: 13px;
+
+  text-decoration: none;
+}
+
+main .product-detail .pd-promo-gift {
+  background: var(--pd-surface);
+
+  border: 1px solid var(--pd-line);
+
+  color: var(--pd-ink);
+}
+
+main .product-detail .pd-promo-icon svg {
+  display: block;
+
+  width: 16px;
+  height: 16px;
+}
+
+main .product-detail .pd-promo-link {
+  color: var(--pd-ink);
+
+  font-weight: 600;
+
+  text-decoration: underline;
+
+  white-space: nowrap;
+}
+
+main .product-detail .pd-promo-highlight {
+  justify-content: space-between;
+
+  background: var(--pd-accent);
+
+  color: #fff;
+
+  font-weight: 600;
+}
+
+/* =========================================================
+   ACCORDION
+========================================================= */
+
+main .product-detail .pd-accordion {
+  border-bottom: 1px solid var(--pd-line);
+}
+
+main .product-detail .pd-accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  padding: 18px 0;
+
+  background: none;
+  border: 0;
+
+  color: var(--pd-ink);
+
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 600;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-accordion-chevron {
+  width: 10px;
+  height: 10px;
+
+  border-right: 1.5px solid var(--pd-ink);
+  border-bottom: 1.5px solid var(--pd-ink);
+
+  transform: rotate(-135deg);
+
+  transition: transform 0.2s ease;
+}
+
+main .product-detail .pd-accordion-toggle[aria-expanded='false'] .pd-accordion-chevron {
+  transform: rotate(45deg);
+}
+
+main .product-detail .pd-accordion-body {
+  padding-bottom: 20px;
+}
+
+main .product-detail .pd-accordion-subtitle {
+  margin: 0 0 12px;
+
+  color: var(--pd-muted);
+
+  font-size: 13px;
+}
+
+main .product-detail .pd-accordion-note {
+  margin: 0 0 12px;
+
+  color: var(--pd-accent);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   KEY FEATURES
+========================================================= */
+
+main .product-detail .pd-features {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+main .product-detail .pd-features li {
+  position: relative;
+
+  margin-bottom: 8px;
+  padding-left: 12px;
+
+  color: #4a4a4a;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+main .product-detail .pd-features li::before {
+  position: absolute;
+  left: 0;
+
+  content: '·';
+}
+
+main .product-detail .pd-features-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 12px;
+}
+
+main .product-detail .pd-features-more {
+  display: flex;
+  align-items: center;
+
+  gap: 4px;
+
+  padding: 0;
+
+  background: none;
+  border: 0;
+
+  color: var(--pd-ink);
+
+  font-family: inherit;
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-specs-link {
+  color: var(--pd-ink);
+
+  font-size: 13px;
+
+  text-decoration: none;
+}
+
+main .product-detail .pd-specs-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   VARIANTS
+========================================================= */
+
+main .product-detail .pd-variants {
+  display: grid;
+
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 10px;
+
+  padding: 12px;
+
+  background: var(--pd-sunken);
+
+  border-radius: 6px;
+}
+
+main .product-detail .pd-variant {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  min-height: 56px;
+
+  padding: 8px 12px;
+
+  background: var(--pd-surface);
+
+  border: 1px solid var(--pd-line);
+  border-radius: 4px;
+
+  color: var(--pd-ink);
+
+  font-family: inherit;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-variant-label {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+main .product-detail .pd-variant-price {
+  color: var(--pd-muted);
+
+  font-size: 12px;
+}
+
+main .product-detail .pd-variant.is-selected {
+  border: 2px solid var(--pd-accent);
+}
+
+main .product-detail .pd-variant.is-unavailable {
+  background: #e8e6e1;
+
+  border-color: transparent;
+
+  color: #a9a9a9;
+
+  cursor: not-allowed;
+}
+
+main .product-detail .pd-variant.is-unavailable .pd-variant-price {
+  color: #a9a9a9;
+}
+
+/* =========================================================
+   POSTCODE
+========================================================= */
+
+main .product-detail .pd-postcode {
+  padding: 18px 0;
+
+  border-bottom: 1px solid var(--pd-line);
+}
+
+main .product-detail .pd-postcode-title {
+  margin: 0 0 10px;
+
+  font-size: 14px;
+  font-weight: 400;
+}
+
+main .product-detail .pd-postcode-form {
+  display: flex;
+
+  gap: 8px;
+}
+
+main .product-detail .pd-postcode-input {
+  flex: 1;
+  min-width: 0;
+
+  height: 38px;
+
+  padding: 0 12px;
+
+  background: var(--pd-surface);
+
+  border: 1px solid #9a9a9a;
+  border-radius: 3px;
+
+  font-family: inherit;
+  font-size: 14px;
+}
+
+main .product-detail .pd-postcode-input:focus {
+  border-color: var(--pd-ink);
+
+  outline: none;
+}
+
+main .product-detail .pd-postcode-submit {
+  min-width: 72px;
+  height: 38px;
+
+  background: var(--pd-surface);
+
+  border: 1px solid var(--pd-ink);
+  border-radius: 3px;
+
+  color: var(--pd-ink);
+
+  font-family: inherit;
+  font-size: 14px;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-postcode-submit:hover {
+  background: var(--pd-ink);
+
+  color: #fff;
+}
+
+main .product-detail .pd-postcode-message {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin: 8px 0 0;
+
+  font-size: 12px;
+}
+
+main .product-detail .pd-postcode-message.is-ok {
+  color: #1a7f37;
+}
+
+main .product-detail .pd-postcode-message.is-error {
+  color: var(--pd-accent);
+}
+
+main .product-detail .pd-postcode-tick svg {
+  display: block;
+
+  width: 13px;
+  height: 13px;
+}
+
+/* =========================================================
+   OUT OF AREA NOTICE
+========================================================= */
+
+main .product-detail .pd-unavailable {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  margin-top: 12px;
+  padding: 12px;
+
+  background: #fdf2f2;
+
+  border: 1px solid var(--pd-accent);
+  border-radius: 4px;
+}
+
+main .product-detail .pd-unavailable-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 18px;
+
+  width: 18px;
+  height: 18px;
+
+  background: var(--pd-accent);
+
+  border-radius: 50%;
+
+  color: #fff;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+main .product-detail .pd-unavailable-body {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+main .product-detail .pd-unavailable-title {
+  color: var(--pd-accent);
+
+  font-size: 13px;
+}
+
+main .product-detail .pd-unavailable-text {
+  color: #6b4a4a;
+
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   BUNDLES
+========================================================= */
+
+main .product-detail .pd-bundles {
+  max-height: 210px;
+
+  overflow-y: auto;
+
+  border: 1px solid var(--pd-line);
+  border-radius: 4px;
+}
+
+main .product-detail .pd-bundle {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px;
+
+  border-bottom: 1px solid var(--pd-line);
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-bundle:last-child {
+  border-bottom: 0;
+}
+
+main .product-detail .pd-bundle-check {
+  flex: 0 0 16px;
+
+  width: 16px;
+  height: 16px;
+
+  margin: 0;
+
+  accent-color: var(--pd-ink);
+}
+
+main .product-detail .pd-bundle-thumb {
+  flex: 0 0 44px;
+
+  height: 34px;
+
+  background: var(--pd-sunken);
+
+  border-radius: 3px;
+}
+
+main .product-detail .pd-bundle-info {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+
+  min-width: 0;
+}
+
+main .product-detail .pd-bundle-name {
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+main .product-detail .pd-bundle-prices {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+
+  gap: 6px;
+}
+
+main .product-detail .pd-bundle-price {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+main .product-detail .pd-bundle-was {
+  color: var(--pd-muted);
+
+  font-size: 11px;
+}
+
+main .product-detail .pd-bundle-save {
+  color: var(--pd-accent);
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+main .product-detail .pd-bundles-footer {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 10px;
+
+  font-size: 13px;
+}
+
+/* =========================================================
+   DEALS
+========================================================= */
+
+main .product-detail .pd-deal {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  padding: 12px;
+
+  border: 1px solid var(--pd-line);
+  border-radius: 4px;
+}
+
+main .product-detail .pd-deal-icon {
+  flex: 0 0 auto;
+
+  color: var(--pd-accent);
+
+  font-weight: 700;
+}
+
+main .product-detail .pd-deal-text {
+  margin: 0;
+
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* =========================================================
+   DELIVERY
+========================================================= */
+
+main .product-detail .pd-delivery {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+main .product-detail .pd-delivery-option {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 14px 12px;
+
+  border: 1px solid var(--pd-line);
+  border-radius: 4px;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-delivery-option.is-selected {
+  border-color: var(--pd-ink);
+}
+
+main .product-detail .pd-delivery-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+}
+
+main .product-detail .pd-delivery-label {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  font-size: 14px;
+}
+
+main .product-detail .pd-delivery-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 14px;
+  height: 14px;
+
+  border: 1px solid var(--pd-muted);
+  border-radius: 50%;
+
+  color: var(--pd-muted);
+
+  font-size: 9px;
+  font-style: italic;
+}
+
+main .product-detail .pd-delivery-price {
+  font-size: 14px;
+}
+
+/* =========================================================
+   LEGAL
+========================================================= */
+
+main .product-detail .pd-legal {
+  margin: 20px 0 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+main .product-detail .pd-legal li {
+  position: relative;
+
+  margin-bottom: 8px;
+  padding-left: 12px;
+
+  color: var(--pd-muted);
+
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+main .product-detail .pd-legal li::before {
+  position: absolute;
+  left: 0;
+
+  content: '*';
+}
+
+main .product-detail .pd-legal-link {
+  color: var(--pd-ink);
+}
+
+/* =========================================================
+   ORDER SUMMARY
+========================================================= */
+
+main .product-detail .pd-order {
+  margin-top: 20px;
+  padding: 16px;
+
+  background: var(--pd-surface);
+
+  border: 1px solid var(--pd-line);
+  border-radius: 6px;
+}
+
+main .product-detail .pd-order-sheet {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 12px;
+
+  color: var(--pd-muted);
+
+  font-size: 11px;
+}
+
+main .product-detail .pd-order-sheet-icon {
+  color: #f5c518;
+}
+
+main .product-detail .pd-order-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 6px;
+
+  font-size: 13px;
+}
+
+main .product-detail .pd-order-subtotal {
+  font-weight: 600;
+}
+
+main .product-detail .pd-order-line {
+  color: #7a6a58;
+
+  font-size: 11px;
+}
+
+main .product-detail .pd-order-total {
+  margin-top: 12px;
+  padding-top: 12px;
+
+  border-top: 1px solid var(--pd-line);
+
+  font-size: 20px;
+  font-weight: 700;
+}
+
+main .product-detail .pd-order-instalments {
+  margin: 0;
+
+  color: var(--pd-muted);
+
+  font-size: 11px;
+
+  text-align: right;
+}
+
+/* =========================================================
+   QUANTITY
+========================================================= */
+
+main .product-detail .pd-qty {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin: 16px 0;
+}
+
+main .product-detail .pd-qty-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+
+  padding: 0;
+
+  background: var(--pd-surface);
+
+  border: 1px solid var(--pd-line);
+  border-radius: 50%;
+
+  color: var(--pd-ink);
+
+  font-family: inherit;
+  font-size: 15px;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-qty-button:disabled {
+  color: #c4c4c4;
+
+  cursor: default;
+}
+
+main .product-detail .pd-qty-value {
+  min-width: 44px;
+
+  padding: 4px 0;
+
+  border: 1px solid var(--pd-line);
+
+  font-size: 14px;
+
+  text-align: center;
+}
+
+/* =========================================================
+   ACTIONS — revealed by the postcode check
+========================================================= */
+
+main .product-detail .pd-actions {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 10px;
+}
+
+main .product-detail .pd-action {
+  height: 42px;
+
+  border-radius: 3px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+main .product-detail .pd-action-basket {
+  background: var(--pd-surface);
+
+  border: 1px solid var(--pd-ink);
+
+  color: var(--pd-ink);
+}
+
+main .product-detail .pd-action-basket:hover {
+  background: var(--pd-sunken);
+}
+
+main .product-detail .pd-action-checkout {
+  background: var(--pd-accent);
+
+  border: 1px solid var(--pd-accent);
+
+  color: #fff;
+}
+
+main .product-detail .pd-action-checkout:hover {
+  background: #c30710;
+}
+
+main .product-detail .pd-action:disabled {
+  background: #e3e3e3;
+
+  border-color: #e3e3e3;
+
+  color: #a0a0a0;
+
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   PAYMENTS
+========================================================= */
+
+main .product-detail .pd-payments {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  gap: 6px;
+
+  margin: 14px 0 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+main .product-detail .pd-payment {
+  padding: 3px 6px;
+
+  background: var(--pd-sunken);
+
+  border-radius: 3px;
+
+  color: var(--pd-muted);
+
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (width >= 600px) {
+  main .product-detail .pd-title {
+    font-size: 28px;
+  }
+
+  main .product-detail .pd-variants {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (width >= 900px) {
+  main .product-detail {
+    padding: 0 24px;
+  }
+
+  main .product-detail .pd-layout {
+    display: grid;
+
+    grid-template-columns: minmax(0, 44fr) minmax(0, 56fr);
+
+    gap: 40px;
+
+    align-items: start;
+  }
+
+  main .product-detail .pd-column-media {
+    position: sticky;
+    top: 88px;
+  }
+
+  main .product-detail .pd-gallery {
+    padding: 24px;
+  }
+
+  main .product-detail .pd-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
