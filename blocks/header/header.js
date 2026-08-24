@@ -444,7 +444,7 @@ function setupTools(navTools) {
 
 /*
  * Hard-coded sub menu shown when hovering
- * the account icon (same as LG.com "MyLG").
+ * the account icon (same as DEMO.com "MyLG").
  *
  * Two variants, picked by the login state.
  */
@@ -465,7 +465,7 @@ const ACCOUNT_MENU_GUEST = [
 
 const ACCOUNT_MENU_MEMBER = [
   {
-    label: 'LG của tôi',
+    label: 'DEMO của tôi',
     href: '/vn/my-lg',
   },
   {
@@ -540,7 +540,7 @@ function closeAccountMenus(root) {
  * "Hoang Nguyen" -> "***** Nguyen"
  *
  * Everything but the last word is masked,
- * the same way LG.com greets a member.
+ * the same way DEMO.com greets a member.
  */
 function maskUserName(name) {
   const parts = name.trim().split(/\s+/).filter(Boolean);

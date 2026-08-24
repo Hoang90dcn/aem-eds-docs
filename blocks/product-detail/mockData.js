@@ -30,7 +30,7 @@ const GALLERY_COUNT = 15;
 
 export const MOCK_PRODUCT = {
   sku: 'OLED83C6ELB',
-  name: '83 inch LG OLED evo AI C6 4K Smart TV 2026',
+  name: '83 inch DEMO OLED evo AI C6 4K Smart TV 2026',
   badge: 'Save with PayPal',
 
   rating: 0,
@@ -38,7 +38,7 @@ export const MOCK_PRODUCT = {
 
   gallery: Array.from({ length: GALLERY_COUNT }, (unused, index) => ({
     src: placeholder(index + 1, 'OLED evo C6'),
-    alt: `83 inch LG OLED evo AI C6 4K Smart TV 2026 — view ${index + 1}`,
+    alt: `83 inch DEMO OLED evo AI C6 4K Smart TV 2026 — view ${index + 1}`,
   })),
 
   keyFeatures: [
@@ -106,14 +106,14 @@ export const MOCK_PRODUCT = {
     },
     {
       id: 'S95TR',
-      name: '9.1.5 channel LG Home Cinema Soundbar with Surround Sound and Rear Speakers',
+      name: '9.1.5 channel DEMO Home Cinema Soundbar with Surround Sound and Rear Speakers',
       price: 649.99,
       wasPrice: 1299.99,
       saveLabel: 'Save 50%',
     },
     {
       id: 'TONE-T90S',
-      name: 'LG TONE Free T90S Earbuds with Dolby Atmos',
+      name: 'DEMO TONE Free T90S Earbuds with Dolby Atmos',
       price: 149.99,
       wasPrice: 199.99,
       saveLabel: 'Save 25%',
